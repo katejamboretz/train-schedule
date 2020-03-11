@@ -26,6 +26,11 @@ $("document").ready(function() {
   var freq = "";
   var arrivalTime = "";
   var minuteAway = "";
+  var baseName = "";
+  var basePlace = "";
+  var baseFreq = "";
+  var baseArrival = "";
+  var baseMinAway = "";
   var now = moment();
   console.log(now.format("HH:mm"));
 
@@ -71,18 +76,28 @@ $("document").ready(function() {
       trainMinuteAway: minuteAway
     });
 
+    // get variables from database
+
+    database.ref().on("child_added", function(childSnapshot) {
+      baseName = childSnapshot.val().trainName;
+      basePlace = childSnapshot.val().trainPlace;
+      baseFreq = childSnapshot.val().trainFreq;
+      baseArrival = childSnapshot.val().trainArrival;
+      baseMinAway = childSnapshot.val().trainMinuteAway;
+    });
+
     // Append train data
     $("#table").append(
       "<tr><td>" +
-        name +
+        baseName +
         "</td><td>" +
-        place +
+        basePlace +
         "</td><td>" +
-        freq +
+        baseFreq +
         "</td><td>" +
-        arrivalTime +
+        baseArrival +
         "</td><td>" +
-        minuteAway +
+        baseMinAway +
         "</td></tr>"
     );
   });
