@@ -26,6 +26,8 @@ $("document").ready(function() {
   var freq = "";
   var arrivalTime = "";
   var minuteAway = "";
+  var now = moment();
+  console.log(now.format("HH:mm"));
 
   // Create on click event for submit button
 
@@ -34,14 +36,31 @@ $("document").ready(function() {
     console.log("I've been clicked!");
 
     // Add input fields to variables
-    var name = $("#name").val();
-    var place = $("#place").val();
-    var freq = $("#freq").val();
-    var time = $("#time").val();
+    name = $("#name").val();
+    place = $("#place").val();
+    freq = parseInt($("#freq").val());
+    time = moment($("#time").val(), "HH:mm");
+    now = moment();
+    console.log(moment(time).format("HH:mm"));
+    console.log(moment(now).format("HH:mm"));
 
-    // Add other variables
-    var arrivalTime = "calculation in progress";
-    var minuteAway = "calculation in progress";
+    // Add other variables and calculate where needed
+    for (var i = 0; i < 2000; i++) {
+      if (
+        (moment(time).hours() < moment(now).hours()) |
+        (moment(time).minutes() < moment(now).minutes())
+      ) {
+        var time = moment(time).add(freq, "m");
+      } else {
+        arrivalTimeUnformatted = time;
+        minuteAway = arrivalTimeUnformatted.diff(now, "m");
+      }
+    }
+
+    console.log(moment(arrivalTimeUnformatted).format("HH:mm"));
+    console.log(minuteAway);
+
+    arrivalTime = moment(arrivalTimeUnformatted).format("HH:mm");
 
     // Add in variables to database
     database.ref().push({
