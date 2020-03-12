@@ -2,7 +2,7 @@ $("document").ready(function() {
   // Initialize Firebase
 
   var config = {
-    apiKey: "AIzaSyBNlRB712Pb2x1ZviJj-FdyvZFt7nWLkUc",
+    apiKey: "enter API key here",
     authDomain: "educationproject-9a3fa.firebaseapp.com",
     databaseURL: "https://educationproject-9a3fa.firebaseio.com",
     projectId: "educationproject-9a3fa",
@@ -24,6 +24,7 @@ $("document").ready(function() {
   var place = "";
   var time = "";
   var freq = "";
+  var arrivalTimeUnformatted = "";
   var arrivalTime = "";
   var minuteAway = "";
   var baseName = "";
@@ -33,6 +34,35 @@ $("document").ready(function() {
   var baseMinAway = "";
   var now = moment();
   console.log(now.format("HH:mm"));
+
+  // get variables from database
+
+  database
+    .ref()
+    .orderByChild("dateAdded")
+    .on("child_added", function(childSnapshot) {
+      console.log("I added a child to the table");
+      baseName = childSnapshot.val().trainName;
+      basePlace = childSnapshot.val().trainPlace;
+      baseFreq = childSnapshot.val().trainFreq;
+      baseArrival = childSnapshot.val().trainArrival;
+      baseMinAway = childSnapshot.val().trainMinuteAway;
+
+      // Append train data
+      $("#table").append(
+        "<tr><td>" +
+          baseName +
+          "</td><td>" +
+          basePlace +
+          "</td><td>" +
+          baseFreq +
+          "</td><td>" +
+          baseArrival +
+          "</td><td>" +
+          baseMinAway +
+          "</td></tr>"
+      );
+    });
 
   // Create on click event for submit button
 
@@ -55,15 +85,19 @@ $("document").ready(function() {
         (moment(time).hours() < moment(now).hours()) |
         (moment(time).minutes() < moment(now).minutes())
       ) {
-        var time = moment(time).add(freq, "m");
+        var time = moment(time).add(freq, "minute");
       } else {
         arrivalTimeUnformatted = time;
-        minuteAway = arrivalTimeUnformatted.diff(now, "m");
+        minuteAway = arrivalTimeUnformatted.diff(now, "minute");
+        minuteOther = now.diff(arrivalTimeUnformatted, "minute");
       }
     }
 
-    console.log(moment(arrivalTimeUnformatted).format("HH:mm"));
-    console.log(minuteAway);
+    console.log(
+      "Arrival Time: " + moment(arrivalTimeUnformatted).format("HH:mm")
+    );
+    console.log("Minutes Away: " + minuteAway);
+    console.log("Switched Difference: " + minuteOther);
 
     arrivalTime = moment(arrivalTimeUnformatted).format("HH:mm");
 
@@ -75,30 +109,5 @@ $("document").ready(function() {
       trainArrival: arrivalTime,
       trainMinuteAway: minuteAway
     });
-
-    // get variables from database
-
-    database.ref().on("child_added", function(childSnapshot) {
-      baseName = childSnapshot.val().trainName;
-      basePlace = childSnapshot.val().trainPlace;
-      baseFreq = childSnapshot.val().trainFreq;
-      baseArrival = childSnapshot.val().trainArrival;
-      baseMinAway = childSnapshot.val().trainMinuteAway;
-    });
-
-    // Append train data
-    $("#table").append(
-      "<tr><td>" +
-        baseName +
-        "</td><td>" +
-        basePlace +
-        "</td><td>" +
-        baseFreq +
-        "</td><td>" +
-        baseArrival +
-        "</td><td>" +
-        baseMinAway +
-        "</td></tr>"
-    );
   });
 });
