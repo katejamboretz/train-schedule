@@ -2,6 +2,11 @@
 
 A train schedule in which users add train information in a form, such as freqency and first train time, from which time variables are calculated using the Moment.js library, including next arrival time. These variables are stored in a Firebase Realtime database and pulled from this database and displayed in a table as a row of data which is visible from different browsers.
 
+## Link to Deployed Site
+
+[Train Schedule](https://katejamboretz.github.io/train-schedule/)
+- Note that firebase is not maintained, so page refresh will delete added data which normally would be maintained and displayed.
+
 ## Built With
 
 - [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) - HyperText Markup Language used for structure
@@ -15,6 +20,7 @@ A train schedule in which users add train information in a form, such as freqenc
 ## Authors
 
 - **Kate Jamboretz** - _Initial work_ - [katejamboretz](https://github.com/katejamboretz)
+- **UCB Extension Full Stack Program** - _provide assignment objective, overall purpose and visual design ideas and repository/file nomenclature and organization_
 
 ## Acknowledgments
 
